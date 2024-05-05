@@ -1,0 +1,17 @@
+name: CGL
+on: push
+jobs:
+  cgl:
+    runs-on: [ubuntu-latest]
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - name: Composer install
+        run: composer install
+
+      - name: CGL
+        run: composer cgl-ci

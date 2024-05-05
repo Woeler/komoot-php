@@ -1,0 +1,7 @@
+/.ddev/
+/.idea/
+
+/vendor/
+/composer.lock
+/test.php
+/.php-cs-fixer.cache
