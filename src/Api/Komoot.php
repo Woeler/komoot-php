@@ -35,7 +35,7 @@ class Komoot
             $this->cookies->setCookie(SetCookie::fromString($header));
         }
 
-        $this->setAccountId();
+        $this->setAccountIdViaCookie();
 
         $response = $this->client->get('https://account.komoot.com/actions/transfer', [
             'cookies' => $this->cookies,
@@ -52,7 +52,7 @@ class Komoot
         }
     }
 
-    private function setAccountId(): void
+    private function setAccountIdViaCookie(): void
     {
         $response = json_decode($this->client->get('https://account.komoot.com/api/account/v1/session', [
             'cookies' => $this->cookies,
@@ -60,6 +60,30 @@ class Komoot
         ])->getBody()->getContents(), true);
 
         $this->userid = (int) $response['_embedded']['profile']['username'];
+    }
+
+    public function getCookieJar(): CookieJar
+    {
+        return $this->cookies;
+    }
+
+    public function setCookieJar(CookieJar $cookieJar): self
+    {
+        $this->cookies = $cookieJar;
+
+        return $this;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userid;
+    }
+
+    public function setUserId(int $userId): self
+    {
+        $this->userid = $userId;
+
+        return $this;
     }
 
     public function getTours(int $page = 0, int $limit = 50, ?TourType $type = null): array
@@ -105,6 +129,13 @@ class Komoot
         return $this->client->get('https://www.komoot.com/api/v007/tours/'.$tourId.'.gpx', [
             'cookies' => $this->cookies,
         ])->getBody()->getContents();
+    }
+
+    public function getTourPhotos(int $tourId): array
+    {
+        return json_decode($this->client->get('https://www.komoot.com/api/v007/tours/'.$tourId.'/cover_images/', [
+            'cookies' => $this->cookies,
+        ])->getBody()->getContents(), true);
     }
 
     public function deleteTour(int $tourId): void
