@@ -1,4 +1,6 @@
 # Komoot PHP
+NOTICE: Komoot has decided to add an invisible captcha to their login process. This renders this library unusable. I have sent them an email asking if we can get an alternative way to log in, but I have yet to receive a response.
+
 This is a PHP library that can be used to interact with Komoot. It uses the same API the Komoot website uses. It is not officially supported by Komoot to integrate it in third party projects. I just needed a fancy way of interacting with Komoot for a personal project. That is why I created this package.
 
 ## Usage
