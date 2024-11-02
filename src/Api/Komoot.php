@@ -23,12 +23,15 @@ class Komoot
         return $this->userid;
     }
 
-    public function getTours(int $page = 0, int $limit = 50, ?TourType $type = null): array
+    public function getTours(int $page = 0, int $limit = 50, ?TourType $type = null, ?Sport $sport = null): array
     {
         $params = ['page' => $page, 'limit' => $limit];
 
         if ($type !== null) {
             $params += ['type' => $type->value];
+        }
+        if ($sport !== null) {
+            $params += ['sport_types' => $sport->value];
         }
 
         return json_decode($this->client->get('https://www.komoot.com/api/v007/users/'.$this->userid.'/tours/', [
@@ -37,12 +40,12 @@ class Komoot
         ])->getBody()->getContents(), true);
     }
 
-    public function getAllTours(?TourType $type = null): array
+    public function getAllTours(?TourType $type = null, ?Sport $sport = null): array
     {
         $page = 0;
         $all = [];
         while (true) {
-            $tours = $this->getTours($page, 50, $type);
+            $tours = $this->getTours($page, 50, $type, $sport);
             $all = array_merge($all, $tours['_embedded']['tours']);
 
             if ($page + 1 === $tours['page']['totalPages']) {
